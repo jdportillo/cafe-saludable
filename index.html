@@ -27,6 +27,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://vitals.vercel-analytics.com">
     
     <!-- Google Analytics - REEMPLAZA 'GA_MEASUREMENT_ID' con tu ID real -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
@@ -46,20 +47,50 @@
         });
     </script>
     
-    <!-- Vercel Analytics (se activa automáticamente en producción) -->
+    <!-- Vercel Analytics - SCRIPT OFICIAL -->
     <script>
-        // Vercel Analytics tracking
-        if (typeof window !== 'undefined' && window.va) {
-            window.va('track', 'page_view', {
-                page: 'ganoderma_presentation',
-                timestamp: new Date().toISOString()
-            });
-        }
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
+    <script defer src="https://va.vercel-scripts.com/v1/script.js"></script>
     
-    <!-- Vercel Speed Insights -->
+    <!-- Vercel Speed Insights - SCRIPT OFICIAL -->
     <script>
         window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    </script>
+    <script defer src="https://va.vercel-scripts.com/v1/speed-insights/script.js"></script>
+    
+    <!-- Vercel Web Analytics - CONFIGURACIÓN ADICIONAL -->
+    <script>
+        // Configuración para Vercel Analytics
+        if (typeof window !== 'undefined') {
+            // Verificar que Vercel Analytics esté disponible
+            window.addEventListener('load', function() {
+                if (window.va) {
+                    // Track page view inicial
+                    window.va('track', 'pageview', {
+                        page: '/ganoderma-presentation',
+                        title: 'Café Enriquecido con Ganoderma',
+                        referrer: document.referrer || 'direct'
+                    });
+                    
+                    // Track session start
+                    window.va('track', 'session_start', {
+                        timestamp: new Date().toISOString(),
+                        user_agent: navigator.userAgent,
+                        screen_resolution: `${screen.width}x${screen.height}`,
+                        viewport_size: `${window.innerWidth}x${window.innerHeight}`
+                    });
+                }
+                
+                // Speed Insights initial tracking
+                if (window.si) {
+                    window.si('track', 'page_load', {
+                        page_type: 'product_presentation',
+                        content_type: 'ganoderma_coffee'
+                    });
+                }
+            });
+        }
     </script>
     
     <!-- Performance monitoring -->
@@ -1098,12 +1129,44 @@
         // 1. En Vercel Dashboard > Project Settings > Environment Variables:
         //    NEXT_PUBLIC_GA_ID = tu_google_analytics_id (ej: G-XXXXXXXXXX)
         // 2. Vercel Analytics se activa automáticamente en producción
+        // 3. Para habilitar en desarrollo, agregar en .env.local:
+        //    VERCEL_ANALYTICS_ID=your_project_id
         
         // Variables globales para tracking
         let sessionStartTime = Date.now();
         let maxScrollReached = 0;
         let sectionsViewed = new Set();
         let orientationChanges = 0;
+        
+        // FUNCIÓN PARA VERIFICAR SI VERCEL ANALYTICS ESTÁ DISPONIBLE
+        function waitForVercelAnalytics(callback, maxAttempts = 10) {
+            let attempts = 0;
+            const checkInterval = setInterval(() => {
+                attempts++;
+                if (window.va && typeof window.va === 'function') {
+                    clearInterval(checkInterval);
+                    callback();
+                } else if (attempts >= maxAttempts) {
+                    clearInterval(checkInterval);
+                    console.log('Vercel Analytics not loaded after maximum attempts');
+                }
+            }, 500);
+        }
+        
+        // FUNCIÓN PARA VERIFICAR SI SPEED INSIGHTS ESTÁ DISPONIBLE
+        function waitForSpeedInsights(callback, maxAttempts = 10) {
+            let attempts = 0;
+            const checkInterval = setInterval(() => {
+                attempts++;
+                if (window.si && typeof window.si === 'function') {
+                    clearInterval(checkInterval);
+                    callback();
+                } else if (attempts >= maxAttempts) {
+                    clearInterval(checkInterval);
+                    console.log('Vercel Speed Insights not loaded after maximum attempts');
+                }
+            }, 500);
+        }
         
         // DETECCIÓN AUTOMÁTICA DE ORIENTACIÓN Y VIEWPORT
         function handleViewportAndOrientation() {
@@ -1132,13 +1195,14 @@
                     });
                 }
                 
-                if (window.va) {
+                waitForVercelAnalytics(() => {
                     window.va('track', 'orientation_change', {
                         orientation: isLandscape ? 'landscape' : 'portrait',
                         device_width: window.innerWidth,
-                        device_height: window.innerHeight
+                        device_height: window.innerHeight,
+                        timestamp: new Date().toISOString()
                     });
-                }
+                });
             }
             orientationChanges++;
         }
@@ -1170,12 +1234,13 @@
                             });
                         }
                         
-                        if (window.va) {
+                        waitForVercelAnalytics(() => {
                             window.va('track', 'section_view', {
                                 section: sectionName,
-                                timestamp: new Date().toISOString()
+                                timestamp: new Date().toISOString(),
+                                time_since_load: Date.now() - sessionStartTime
                             });
-                        }
+                        });
                     }
                 }
             });
@@ -1293,16 +1358,26 @@
                 });
             }
             
-            // Vercel Analytics
-            if (window.va) {
+            // Vercel Analytics - con verificación
+            waitForVercelAnalytics(() => {
                 window.va('track', 'whatsapp_contact', {
                     source: source,
                     engagement_level: scrolledPercentage > 75 ? 'high' : scrolledPercentage > 50 ? 'medium' : 'low',
                     time_spent: timeOnPage,
                     sections_completed: sectionsViewed.size,
+                    conversion_type: 'lead_generation',
+                    product_interest: 'ganoderma_coffee',
                     timestamp: new Date().toISOString()
                 });
-            }
+                
+                // Track como evento de conversión en Vercel
+                window.va('track', 'conversion', {
+                    type: 'whatsapp_lead',
+                    value: 1,
+                    source: source,
+                    engagement_score: Math.min(100, (scrolledPercentage + sectionsViewed.size * 10))
+                });
+            });
             
             // Custom event para tracking detallado
             window.dataLayer = window.dataLayer || [];
@@ -1315,84 +1390,340 @@
             });
         }
 
-        // PERFORMANCE MONITORING
+        // 🔍 PERFORMANCE MONITORING AVANZADO
         function trackPerformance() {
             // Navigation timing
             if ('performance' in window && 'timing' in performance) {
                 const timing = performance.timing;
-                const loadTime = timing.loadEventEnd - timing.navigationStart;
-                const domReady = timing.domContentLoadedEventEnd - timing.navigationStart;
+                const navigation = performance.navigation;
                 
+                const performanceMetrics = {
+                    dns_lookup: timing.domainLookupEnd - timing.domainLookupStart,
+                    tcp_connection: timing.connectEnd - timing.connectStart,
+                    ssl_negotiation: timing.connectEnd - timing.secureConnectionStart,
+                    server_response: timing.responseEnd - timing.requestStart,
+                    dom_processing: timing.domContentLoadedEventEnd - timing.domLoading,
+                    resource_loading: timing.loadEventEnd - timing.domContentLoadedEventEnd,
+                    total_load_time: timing.loadEventEnd - timing.navigationStart,
+                    time_to_first_byte: timing.responseStart - timing.navigationStart,
+                    navigation_type: navigation.type, // 0=navigate, 1=reload, 2=back_forward
+                    redirect_count: navigation.redirectCount
+                };
+                
+                // Send to Google Analytics
                 if (typeof gtag === 'function') {
-                    gtag('event', 'timing_complete', {
-                        event_category: 'performance',
-                        name: 'load_time',
-                        value: loadTime
-                    });
-                    
-                    gtag('event', 'timing_complete', {
-                        event_category: 'performance',
-                        name: 'dom_ready',
-                        value: domReady
+                    Object.keys(performanceMetrics).forEach(metric => {
+                        if (typeof performanceMetrics[metric] === 'number' && performanceMetrics[metric] > 0) {
+                            gtag('event', 'timing_complete', {
+                                event_category: 'performance',
+                                name: metric,
+                                value: performanceMetrics[metric]
+                            });
+                        }
                     });
                 }
+                
+                // Send to Vercel Analytics
+                waitForVercelAnalytics(() => {
+                    window.va('track', 'performance_metrics', {
+                        ...performanceMetrics,
+                        user_agent: navigator.userAgent,
+                        connection_type: navigator.connection?.effectiveType || 'unknown',
+                        memory: navigator.deviceMemory || 'unknown',
+                        cores: navigator.hardwareConcurrency || 'unknown',
+                        timestamp: new Date().toISOString()
+                    });
+                });
+                
+                console.log('🔍 Performance metrics tracked:', performanceMetrics);
             }
             
             // Connection info
             if ('connection' in navigator) {
                 const connection = navigator.connection;
-                if (window.va) {
-                    window.va('track', 'connection_info', {
-                        effective_type: connection.effectiveType,
-                        downlink: connection.downlink,
-                        rtt: connection.rtt
-                    });
-                }
-            }
-        }
-
-        // DEVICE DETECTION
-        function detectDevice() {
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const isTablet = /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(navigator.userAgent);
-            const isDesktop = !isMobile && !isTablet;
-            
-            // Track device type
-            if (window.va) {
-                window.va('track', 'device_info', {
-                    device_type: isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop',
-                    user_agent: navigator.userAgent,
-                    screen_width: screen.width,
-                    screen_height: screen.height,
-                    pixel_ratio: window.devicePixelRatio || 1
+                const connectionData = {
+                    effective_type: connection.effectiveType,
+                    downlink: connection.downlink,
+                    rtt: connection.rtt,
+                    save_data: connection.saveData
+                };
+                
+                waitForVercelAnalytics(() => {
+                    window.va('track', 'connection_info', connectionData);
                 });
             }
             
-            return { isMobile, isTablet, isDesktop };
+            // Memory info (Chrome only)
+            if ('memory' in performance) {
+                const memoryInfo = {
+                    used_heap: performance.memory.usedJSHeapSize,
+                    total_heap: performance.memory.totalJSHeapSize,
+                    heap_limit: performance.memory.jsHeapSizeLimit
+                };
+                
+                waitForVercelAnalytics(() => {
+                    window.va('track', 'memory_usage', memoryInfo);
+                });
+            }
         }
 
-        // INICIALIZACIÓN DE LA APLICACIÓN
+        // 📱 DEVICE DETECTION AVANZADO
+        function detectDevice() {
+            const userAgent = navigator.userAgent;
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+            const isTablet = /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(userAgent);
+            const isDesktop = !isMobile && !isTablet;
+            
+            // Detectar sistema operativo
+            let os = 'unknown';
+            if (/Windows/.test(userAgent)) os = 'Windows';
+            else if (/Mac OS/.test(userAgent)) os = 'macOS';
+            else if (/Linux/.test(userAgent)) os = 'Linux';
+            else if (/Android/.test(userAgent)) os = 'Android';
+            else if (/iOS|iPhone|iPad/.test(userAgent)) os = 'iOS';
+            
+            // Detectar navegador
+            let browser = 'unknown';
+            if (/Chrome/.test(userAgent) && !/Edge/.test(userAgent)) browser = 'Chrome';
+            else if (/Firefox/.test(userAgent)) browser = 'Firefox';
+            else if (/Safari/.test(userAgent) && !/Chrome/.test(userAgent)) browser = 'Safari';
+            else if (/Edge/.test(userAgent)) browser = 'Edge';
+            else if (/Opera/.test(userAgent)) browser = 'Opera';
+            
+            const deviceInfo = {
+                device_type: isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop',
+                is_mobile: isMobile,
+                is_tablet: isTablet,
+                is_desktop: isDesktop,
+                operating_system: os,
+                browser: browser,
+                user_agent: userAgent,
+                screen_width: screen.width,
+                screen_height: screen.height,
+                screen_color_depth: screen.colorDepth,
+                pixel_ratio: window.devicePixelRatio || 1,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                language: navigator.language,
+                languages: navigator.languages,
+                platform: navigator.platform,
+                cookie_enabled: navigator.cookieEnabled,
+                do_not_track: navigator.doNotTrack === '1',
+                online: navigator.onLine
+            };
+            
+            // Track device type
+            waitForVercelAnalytics(() => {
+                window.va('track', 'device_info', deviceInfo);
+            });
+            
+            if (typeof gtag === 'function') {
+                gtag('event', 'device_detection', {
+                    event_category: 'technical',
+                    device_type: deviceInfo.device_type,
+                    operating_system: deviceInfo.operating_system,
+                    browser: deviceInfo.browser,
+                    screen_resolution: `${deviceInfo.screen_width}x${deviceInfo.screen_height}`
+                });
+            }
+            
+            console.log('📱 Device detected:', deviceInfo);
+            return deviceInfo;
+        }
+        
+        // 🎮 A/B TESTING FRAMEWORK
+        function initializeABTesting() {
+            // Determinar variante basada en session ID
+            const sessionId = window.analyticsConfig?.sessionId || '';
+            const hash = sessionId.split('').reduce((a, b) => {
+                a = ((a << 5) - a) + b.charCodeAt(0);
+                return a & a;
+            }, 0);
+            
+            Object.keys(abTestConfig.tests).forEach(testName => {
+                const test = abTestConfig.tests[testName];
+                const variant = Math.abs(hash) % 100 < (test.weight * 100) ? test.variants[0] : test.variants[1];
+                test.current = variant;
+                
+                // Track A/B test assignment
+                waitForVercelAnalytics(() => {
+                    window.va('track', 'ab_test_assignment', {
+                        test_name: testName,
+                        variant: variant,
+                        session_id: sessionId,
+                        timestamp: new Date().toISOString()
+                    });
+                });
+                
+                if (typeof gtag === 'function') {
+                    gtag('event', 'ab_test_view', {
+                        event_category: 'experiment',
+                        test_name: testName,
+                        variant: variant
+                    });
+                }
+                
+                console.log(`🎮 A/B Test ${testName}: ${variant}`);
+            });
+        }
+        
+        // 📊 HEATMAP DATA COLLECTION
+        function trackClickHeatmap(e) {
+            const rect = document.documentElement.getBoundingClientRect();
+            const x = e.clientX;
+            const y = e.clientY;
+            const scrollY = window.scrollY;
+            
+            const clickData = {
+                x: x,
+                y: y + scrollY,
+                relative_x: (x / window.innerWidth) * 100,
+                relative_y: ((y + scrollY) / document.body.scrollHeight) * 100,
+                element_tag: e.target.tagName.toLowerCase(),
+                element_class: e.target.className,
+                element_id: e.target.id,
+                element_text: e.target.textContent?.substring(0, 50) || '',
+                page_width: window.innerWidth,
+                page_height: document.body.scrollHeight,
+                viewport_height: window.innerHeight,
+                scroll_position: scrollY,
+                timestamp: new Date().toISOString()
+            };
+            
+            totalClicks++;
+            
+            waitForVercelAnalytics(() => {
+                window.va('track', 'click_heatmap', clickData);
+            });
+        }
+        
+        // 🚨 ERROR TRACKING AVANZADO
+        function setupErrorTracking() {
+            // JavaScript errors
+            window.addEventListener('error', function(e) {
+                const errorData = {
+                    message: e.message,
+                    filename: e.filename,
+                    line_number: e.lineno,
+                    column_number: e.colno,
+                    stack: e.error?.stack || 'No stack trace',
+                    user_agent: navigator.userAgent,
+                    url: window.location.href,
+                    timestamp: new Date().toISOString()
+                };
+                
+                if (typeof gtag === 'function') {
+                    gtag('event', 'exception', {
+                        description: `${e.message} - ${e.filename}:${e.lineno}`,
+                        fatal: false,
+                        page_title: 'Ganoderma Presentation'
+                    });
+                }
+                
+                waitForVercelAnalytics(() => {
+                    window.va('track', 'javascript_error', errorData);
+                });
+                
+                console.error('🚨 JavaScript Error tracked:', errorData);
+            });
+            
+            // Promise rejections
+            window.addEventListener('unhandledrejection', function(e) {
+                const errorData = {
+                    reason: e.reason?.toString() || 'Unknown promise rejection',
+                    stack: e.reason?.stack || 'No stack trace',
+                    user_agent: navigator.userAgent,
+                    url: window.location.href,
+                    timestamp: new Date().toISOString()
+                };
+                
+                waitForVercelAnalytics(() => {
+                    window.va('track', 'promise_rejection', errorData);
+                });
+                
+                console.error('🚨 Promise Rejection tracked:', errorData);
+            });
+        }
+        
+        // 📈 CUSTOM EVENTS PARA BUSINESS INTELLIGENCE
+        function trackBusinessEvents() {
+            // Track engagement milestones
+            setInterval(() => {
+                const currentEngagement = calculateEngagementScore();
+                if (currentEngagement >= 25 && !window.engagementMilestones?.quarter) {
+                    window.engagementMilestones = window.engagementMilestones || {};
+                    window.engagementMilestones.quarter = true;
+                    
+                    waitForVercelAnalytics(() => {
+                        window.va('track', 'engagement_milestone', {
+                            milestone: '25_percent',
+                            score: currentEngagement,
+                            time_to_milestone: Date.now() - sessionStartTime
+                        });
+                    });
+                }
+                
+                if (currentEngagement >= 50 && !window.engagementMilestones?.half) {
+                    window.engagementMilestones.half = true;
+                    
+                    waitForVercelAnalytics(() => {
+                        window.va('track', 'engagement_milestone', {
+                            milestone: '50_percent',
+                            score: currentEngagement,
+                            time_to_milestone: Date.now() - sessionStartTime
+                        });
+                    });
+                }
+                
+                if (currentEngagement >= 75 && !window.engagementMilestones?.three_quarters) {
+                    window.engagementMilestones.three_quarters = true;
+                    
+                    waitForVercelAnalytics(() => {
+                        window.va('track', 'engagement_milestone', {
+                            milestone: '75_percent',
+                            score: currentEngagement,
+                            time_to_milestone: Date.now() - sessionStartTime
+                        });
+                    });
+                }
+            }, 5000); // Check every 5 seconds
+        }
+
+        // 🎯 INICIALIZACIÓN COMPLETA DEL SISTEMA
         document.addEventListener('DOMContentLoaded', function() {
-            // Detectar dispositivo
+            console.log('🚀 Initializing Advanced Analytics System...');
+            
+            // 1. Detectar dispositivo y configuración inicial
             const deviceInfo = detectDevice();
             
-            // Configurar viewport y orientación
+            // 2. Configurar viewport y orientación
             handleViewportAndOrientation();
             
-            // Configurar observers para animaciones y analytics
+            // 3. Inicializar A/B Testing
+            initializeABTesting();
+            
+            // 4. Configurar error tracking
+            setupErrorTracking();
+            
+            // 5. Iniciar business events tracking
+            trackBusinessEvents();
+            
+            // 6. Track funnel step inicial
+            trackFunnelStep('page_load');
+            
+            // 7. Configurar observers para animaciones y analytics
             document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
                 el.style.animationPlayState = 'paused';
                 sectionObserver.observe(el);
             });
             
-            // Agregar data-section a las secciones para tracking
+            // 8. Agregar data-section a las secciones para tracking
+            const sectionNames = ['hero', 'what_is', 'benefits', 'products', 'how_works', 'cta'];
             document.querySelectorAll('.section').forEach((section, index) => {
-                const sectionNames = ['hero', 'what_is', 'benefits', 'products', 'how_works', 'cta'];
                 section.dataset.section = sectionNames[index] || `section_${index}`;
                 sectionObserver.observe(section);
             });
             
-            // Configurar event listeners
+            // 9. Configurar event listeners principales
             window.addEventListener('orientationchange', () => {
                 setTimeout(handleViewportAndOrientation, 100);
             });
@@ -1400,50 +1731,55 @@
             window.addEventListener('resize', handleViewportAndOrientation);
             window.addEventListener('scroll', handleScroll, { passive: true });
             
-            // Touch events
+            // 10. Touch events avanzados
             document.addEventListener('touchstart', handleTouchStart, { passive: true });
+            document.addEventListener('touchmove', handleTouchMove, { passive: true });
             document.addEventListener('touchend', handleTouchEnd, { passive: true });
             
-            // Click tracking para WhatsApp
+            // 11. Click tracking para WhatsApp con diferentes fuentes
             document.querySelectorAll('.whatsapp-btn').forEach(btn => {
-                btn.addEventListener('click', () => trackWhatsAppClick('main_button'));
+                btn.addEventListener('click', () => {
+                    trackWhatsAppClick('main_button');
+                    trackFunnelStep('whatsapp_clicked');
+                });
             });
             
             document.querySelectorAll('.whatsapp-fixed').forEach(btn => {
-                btn.addEventListener('click', () => trackWhatsAppClick('floating_button'));
+                btn.addEventListener('click', () => {
+                    trackWhatsAppClick('floating_button');
+                    trackFunnelStep('whatsapp_clicked');
+                });
             });
             
-            // Track all clicks for heatmap analysis
-            document.addEventListener('click', function(e) {
-                if (window.va) {
-                    window.va('track', 'element_click', {
-                        element_type: e.target.tagName.toLowerCase(),
-                        element_class: e.target.className,
-                        element_id: e.target.id,
-                        x_position: e.clientX,
-                        y_position: e.clientY
+            // 12. Heatmap tracking para todos los clicks
+            document.addEventListener('click', trackClickHeatmap);
+            
+            // 13. Visibility change tracking
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    // Page hidden - track session pause
+                    waitForVercelAnalytics(() => {
+                        window.va('track', 'session_pause', {
+                            time_visible: Date.now() - sessionStartTime,
+                            max_scroll_reached: maxScrollReached,
+                            sections_viewed: sectionsViewed.size,
+                            engagement_score: calculateEngagementScore(),
+                            funnel_progress: conversionFunnel.completed.size
+                        });
+                    });
+                } else {
+                    // Page visible again - update session start time
+                    sessionStartTime = Date.now();
+                    
+                    waitForVercelAnalytics(() => {
+                        window.va('track', 'session_resume', {
+                            timestamp: new Date().toISOString()
+                        });
                     });
                 }
             });
             
-            // Visibility change tracking
-            document.addEventListener('visibilitychange', function() {
-                if (document.hidden) {
-                    // Page hidden - track session data
-                    if (window.va) {
-                        window.va('track', 'session_pause', {
-                            time_visible: Date.now() - sessionStartTime,
-                            max_scroll_reached: maxScrollReached,
-                            sections_viewed: sectionsViewed.size
-                        });
-                    }
-                } else {
-                    // Page visible again
-                    sessionStartTime = Date.now();
-                }
-            });
-            
-            // Smooth scroll optimizado
+            // 14. Smooth scroll optimizado
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -1454,63 +1790,137 @@
                             top: targetPosition,
                             behavior: 'smooth'
                         });
+                        
+                        // Track internal navigation
+                        waitForVercelAnalytics(() => {
+                            window.va('track', 'internal_navigation', {
+                                target_section: this.getAttribute('href'),
+                                scroll_to_position: targetPosition
+                            });
+                        });
                     }
                 });
             });
             
-            // Track performance metrics después de la carga
-            window.addEventListener('load', trackPerformance);
+            // 15. Track performance metrics después de la carga completa
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    trackPerformance();
+                    trackFunnelStep('page_load_complete');
+                    
+                    console.log('✅ Analytics System Fully Initialized');
+                    console.log('📊 Tracking:', {
+                        'Page Views': '✅',
+                        'Scroll Depth': '✅',
+                        'Section Engagement': '✅',
+                        'Touch Interactions': '✅',
+                        'WhatsApp Conversions': '✅',
+                        'Performance Metrics': '✅',
+                        'Error Tracking': '✅',
+                        'A/B Testing': '✅',
+                        'Heatmap Data': '✅',
+                        'Business Events': '✅'
+                    });
+                }, 1000);
+            });
+            
+            console.log('🎯 Analytics initialization complete!');
         });
 
-        // UNLOAD TRACKING
+        // 📤 UNLOAD TRACKING AVANZADO
         window.addEventListener('beforeunload', function() {
             const sessionDuration = Date.now() - sessionStartTime;
+            const finalEngagementScore = calculateEngagementScore();
             
-            // Send beacon para datos críticos
-            if ('sendBeacon' in navigator && window.va) {
+            const sessionSummary = {
+                session_duration: sessionDuration,
+                max_scroll: maxScrollReached,
+                sections_viewed: sectionsViewed.size,
+                total_sections: 6,
+                funnel_completion: conversionFunnel.completed.size,
+                funnel_percentage: Math.round(conversionFunnel.completed.size / conversionFunnel.steps.length * 100),
+                engagement_score: finalEngagementScore,
+                touch_interactions: touchInteractions,
+                total_clicks: totalClicks,
+                orientation_changes: orientationChanges,
+                session_quality: finalEngagementScore > 75 ? 'high' : finalEngagementScore > 50 ? 'medium' : 'low',
+                session_id: window.analyticsConfig?.sessionId,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Send beacon para datos críticos de la sesión
+            if ('sendBeacon' in navigator) {
                 const data = JSON.stringify({
                     event: 'session_end',
-                    duration: sessionDuration,
-                    max_scroll: maxScrollReached,
-                    sections_viewed: sectionsViewed.size,
-                    orientation_changes: orientationChanges
+                    data: sessionSummary
                 });
                 
+                // Intentar enviar a endpoint custom si existe
                 navigator.sendBeacon('/api/analytics', data);
+                
+                // También enviar a Vercel Analytics si está disponible
+                if (window.va) {
+                    window.va('track', 'session_complete', sessionSummary);
+                }
             }
+            
+            console.log('📤 Session summary sent:', sessionSummary);
         });
 
-        // ERROR TRACKING
-        window.addEventListener('error', function(e) {
-            if (typeof gtag === 'function') {
-                gtag('event', 'exception', {
-                    description: `${e.message} - ${e.filename}:${e.lineno}`,
-                    fatal: false,
-                    page_title: 'Ganoderma Presentation'
-                });
-            }
-        });
-
-        // PRELOAD OPTIMIZATION
+        // 🔄 PRELOAD OPTIMIZATION AVANZADO
         if ('requestIdleCallback' in window) {
             requestIdleCallback(() => {
-                // Precargar WhatsApp link
-                const link = document.createElement('link');
-                link.rel = 'prefetch';
-                link.href = 'https://wa.me/50378504789';
-                document.head.appendChild(link);
-                
-                // Precargar imágenes críticas
-                const criticalImages = [
+                // Precargar recursos críticos
+                const criticalResources = [
+                    'https://wa.me/50378504789',
                     'https://i.ibb.co/YTFq6QgF/Foto-profesional.png'
                 ];
                 
-                criticalImages.forEach(src => {
+                criticalResources.forEach(resource => {
+                    const link = document.createElement('link');
+                    link.rel = 'prefetch';
+                    link.href = resource;
+                    document.head.appendChild(link);
+                });
+                
+                // Precargar imágenes de productos si no están visibles
+                const productImages = [
+                    'https://i.ibb.co/LzNbZ6PV/1-3en1.png',
+                    'https://i.ibb.co/RT2k65Vk/2-clasico.png',
+                    'https://i.ibb.co/nJ2NB0D/3-chocolate.png',
+                    'https://i.ibb.co/VWG4zsL0/4-latte.png',
+                    'https://i.ibb.co/BKYqXZ2J/5-mocha.png'
+                ];
+                
+                productImages.forEach(src => {
                     const img = new Image();
                     img.src = src;
                 });
+                
+                console.log('🔄 Critical resources preloaded');
             });
         }
+        
+        // 🎉 SISTEMA COMPLETAMENTE INICIALIZADO
+        console.log(`
+        🚀 GANODERMA ANALYTICS SYSTEM v1.0
+        =====================================
+        ✅ Google Analytics 4 Integration
+        ✅ Vercel Web Analytics  
+        ✅ Vercel Speed Insights
+        ✅ Advanced Performance Monitoring
+        ✅ Touch Gesture Recognition
+        ✅ A/B Testing Framework
+        ✅ Conversion Funnel Tracking
+        ✅ Heatmap Data Collection
+        ✅ Error Tracking & Reporting
+        ✅ Business Intelligence Events
+        ✅ Mobile Optimization
+        ✅ Real-time Engagement Scoring
+        =====================================
+        📊 Ready to track all user interactions!
+        `);
+    </script>
     </script>
 </body>
 </html>
