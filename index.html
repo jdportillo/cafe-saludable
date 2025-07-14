@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☕ Café Enriquecido con Ganoderma - El Hongo de la Inmortalidad</title>
+    <meta name="description" content="Descubre los increíbles beneficios del Ganoderma Lucidum para tu salud">
+    
+    <!-- CONFIGURACIÓN PARA VERCEL -->
+    <!-- 1. Crear archivo vercel.json en la raíz:
+    {
+      "buildCommand": "echo 'No build needed'",
+      "outputDirectory": ".",
+      "functions": {
+        "api/analytics.js": {
+          "runtime": "@vercel/node"
+        }
+      }
+    }
+    -->
+    <!-- 2. Variables de entorno en Vercel Dashboard:
+         NEXT_PUBLIC_GA_ID = G-XXXXXXXXXX (tu ID de Google Analytics)
+         VERCEL_ANALYTICS_ID = (se configura automáticamente)
+    -->
+    
+    <!-- Preconnect para optimización -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    
+    <!-- Google Analytics - REEMPLAZA 'GA_MEASUREMENT_ID' con tu ID real -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        
+        // Configuración dinámica para Vercel
+        const GA_ID = process?.env?.NEXT_PUBLIC_GA_ID || 'GA_MEASUREMENT_ID';
+        gtag('config', GA_ID, {
+            page_title: 'Ganoderma Product Presentation',
+            page_location: window.location.href,
+            custom_map: {
+                'custom_parameter_1': 'ganoderma_interest'
+            }
+        });
+    </script>
+    
+    <!-- Vercel Analytics (se activa automáticamente en producción) -->
+    <script>
+        // Vercel Analytics tracking
+        if (typeof window !== 'undefined' && window.va) {
+            window.va('track', 'page_view', {
+                page: 'ganoderma_presentation',
+                timestamp: new Date().toISOString()
+            });
+        }
+    </script>
+    
+    <!-- Vercel Speed Insights -->
+    <script>
+        window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    </script>
+    
+    <!-- Performance monitoring -->
+    <script>
+        // Core Web Vitals tracking para Vercel
+        function sendToAnalytics(metric) {
+            // Google Analytics
+            if (typeof gtag === 'function') {
+                gtag('event', metric.name, {
+                    event_category: 'Web Vitals',
+                    value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+                    event_label: metric.id,
+                    non_interaction: true,
+                });
+            }
+            
+            // Vercel Analytics
+            if (window.va) {
+                window.va('track', 'web_vital', {
+                    metric_name: metric.name,
+                    metric_value: metric.value,
+                    metric_id: metric.id
+                });
+            }
+        }
+        
+        // Import web-vitals para medición de performance
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => {
+                import('https://unpkg.com/web-vitals@3/dist/web-vitals.js').then(({onCLS, onFID, onFCP, onLCP, onTTFB}) => {
+                    onCLS(sendToAnalytics);
+                    onFID(sendToAnalytics);
+                    onFCP(sendToAnalytics);
+                    onLCP(sendToAnalytics);
+                    onTTFB(sendToAnalytics);
+                }).catch(() => {
+                    // Fallback si no se puede cargar web-vitals
+                    console.log('Web Vitals library not loaded');
+                });
+            });
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            /* Optimización para touch */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 50%, #8B4513 100%);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+            /* Optimización para rendimiento */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            /* Variables CSS para orientación dinámica */
+            --vh: 1vh;
+            --vw: 1vw;
+        }
+
+        /* Hack para viewport height real en móviles */
+        html {
+            height: 100%;
+            height: -webkit-fill-available;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            min-height: calc(var(--vh, 1vh) * 100);
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .section:nth-child(even) {
+            background: linear-gradient(135deg, #2c1810 0%, #1a1a1a 100%);
+        }
+
+        .section:nth-child(odd) {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(244, 164, 96, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #1a1a1a 0%, #2d1810 50%, #8B4513 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="sparkle" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23sparkle)"/></svg>');
+            animation: sparkle 3s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-mushroom {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #8B4513, #CD853F);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            margin: 0 auto 2rem;
+            box-shadow: 0 15px 40px rgba(139, 69, 19, 0.6);
+            animation: coffeeAnimation 3s ease-in-out infinite;
+        }
+
+        @keyframes coffeeAnimation {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg); 
+                box-shadow: 0 15px 40px rgba(139, 69, 19, 0.6);
+            }
+            25% { 
+                transform: scale(1.1) rotate(-5deg); 
+                box-shadow: 0 20px 50px rgba(139, 69, 19, 0.8);
+            }
+            50% { 
+                transform: scale(1.15) rotate(0deg); 
+                box-shadow: 0 25px 60px rgba(139, 69, 19, 1);
+            }
+            75% { 
+                transform: scale(1.1) rotate(5deg); 
+                box-shadow: 0 20px 50px rgba(139, 69, 19, 0.8);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 8vw, 2.8rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.1rem, 4vw, 1.4rem);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            z-index: 2;
+            font-size: 1.5rem;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Section titles */
+        .section h2 {
+            font-size: clamp(1.8rem, 6vw, 2.2rem);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .section h2 .emoji {
+            font-size: clamp(2rem, 7vw, 2.5rem);
+            filter: none;
+        }
+
+        .section h2 .text {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Cards */
+        .info-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        /* Benefits grid */
+        .benefits-grid {
+            display: grid;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .benefit-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+            text-align: left;
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .benefit-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        /* Products showcase */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .product-card {
+            background: linear-gradient(135deg, #8B4513, #CD853F);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+
+        .product-card:nth-child(5) {
+            grid-column: 1 / -1;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px;
+        }
+
+        .product-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #FFD700, #FFED4E);
+            color: #1a1a1a;
+            padding: 3rem 1rem;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+        }
+
+        .cta-section h2 {
+            color: #1a1a1a;
+        }
+
+        .cta-section h2 .text {
+            color: #1a1a1a;
+            -webkit-text-fill-color: #1a1a1a;
+            background: none;
+        }
+
+        .presenter-info {
+            background: rgba(26, 26, 26, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid rgba(26, 26, 26, 0.1);
+        }
+
+        .presenter-info h3 {
+            color: #1a1a1a !important;
+            font-weight: 700;
+        }
+
+        .presenter-info p {
+            color: #1a1a1a !important;
+            font-weight: 500;
+        }
+
+        .presenter-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            border: 4px solid rgba(26, 26, 26, 0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            padding: 1.2rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            margin: 1rem 0;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(37, 211, 102, 0.6);
+        }
+
+        .whatsapp-fixed {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+            z-index: 9999;
+            text-decoration: none;
+            font-size: 1.5rem;
+            animation: pulse 2s infinite;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 380px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            .product-card:nth-child(5) {
+                grid-column: 1;
+                max-width: 100%;
+            }
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* OPTIMIZACIONES PARA ORIENTACIÓN Y DISPOSITIVOS */
+        
+        /* Orientación Portrait (Vertical) */
+        @media screen and (orientation: portrait) {
+            .section {
+                min-height: calc(var(--vh, 1vh) * 100);
+                padding: clamp(1rem, 4vw, 2rem) 1rem;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Orientación Landscape (Horizontal) */
+        @media screen and (orientation: landscape) {
+            .section {
+                min-height: calc(var(--vh, 1vh) * 100);
+                padding: clamp(0.5rem, 2vh, 1.5rem) 1rem;
+            }
+            
+            .hero h1 {
+                font-size: clamp(1.8rem, 5vh, 2.5rem);
+                margin-bottom: 0.8rem;
+            }
+            
+            .hero .subtitle {
+                font-size: clamp(1rem, 3vh, 1.3rem);
+                margin-bottom: 1.5rem;
+            }
+            
+            .section h2 {
+                font-size: clamp(1.5rem, 4vh, 2rem);
+                margin-bottom: 1.5rem;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .product-card:nth-child(4), 
+            .product-card:nth-child(5) {
+                grid-column: span 1;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .info-card {
+                padding: 1.5rem;
+                margin: 1rem 0;
+            }
+        }
+
+        /* Landscape en dispositivos pequeños */
+        @media screen and (orientation: landscape) and (max-height: 500px) {
+            .section {
+                min-height: auto;
+                padding: 1rem;
+            }
+            
+            .hero {
+                padding: 1rem;
+            }
+            
+            .logo-mushroom {
+                width: 100px;
+                height: 100px;
+                font-size: 3rem;
+                margin-bottom: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .hero .subtitle {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .section h2 {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.5rem;
+            }
+            
+            .benefit-item {
+                padding: 1rem;
+            }
+            
+            .benefit-icon {
+                font-size: 1.8rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            .product-card {
+                padding: 1rem;
+            }
+            
+            .product-image {
+                height: 60px;
+            }
+            
+            .product-name {
+                font-size: 0.9rem;
+            }
+            
+            .scroll-indicator {
+                bottom: 1rem;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Tablet landscape optimizations */
+        @media screen and (orientation: landscape) and (min-width: 768px) and (max-width: 1024px) {
+            .benefits-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            .container {
+                max-width: 600px;
+            }
+        }
+
+        /* Desktop landscape */
+        @media screen and (orientation: landscape) and (min-width: 1025px) {
+            .container {
+                max-width: 800px;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        /* OPTIMIZACIONES PARA PANTALLAS TÁCTILES */
+        
+        /* Touch targets mínimos de 44px */
+        .whatsapp-btn,
+        .whatsapp-fixed,
+        .product-card,
+        .benefit-item,
+        .stat-box {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        /* Hover states solo para dispositivos que los soportan */
+        @media (hover: hover) and (pointer: fine) {
+            .info-card:hover,
+            .benefit-item:hover,
+            .product-card:hover,
+            .stat-box:hover {
+                transform: translateY(-5px);
+            }
+            
+            .whatsapp-btn:hover {
+                background: #128C7E;
+                transform: translateY(-3px);
+                box-shadow: 0 12px 35px rgba(37, 211, 102, 0.6);
+            }
+        }
+
+        /* Touch interactions para dispositivos táctiles */
+        @media (hover: none) and (pointer: coarse) {
+            .info-card:active,
+            .benefit-item:active,
+            .product-card:active,
+            .stat-box:active {
+                transform: scale(0.98);
+                transition: transform 0.1s ease;
+            }
+            
+            .whatsapp-btn:active,
+            .whatsapp-fixed:active {
+                background: #128C7E;
+                transform: scale(0.95);
+                transition: all 0.1s ease;
+            }
+            
+            /* Feedback táctil mejorado */
+            .product-card:active {
+                box-shadow: 0 2px 10px rgba(139, 69, 19, 0.5);
+            }
+            
+            .benefit-item:active {
+                background: rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        /* Optimización para gestos de swipe */
+        .section {
+            scroll-snap-align: start;
+            overscroll-behavior: contain;
+        }
+
+        /* Smooth scrolling nativo */
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y proximity;
+        }
+
+        /* Performance optimizations */
+        .info-card,
+        .benefit-item,
+        .product-card,
+        .stat-box {
+            contain: layout style paint;
+            will-change: transform;
+        }
+
+        /* Reducir animaciones para usuarios que lo prefieran */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            
+            .scroll-indicator {
+                animation: none;
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            body {
+                background: #000;
+                color: #fff;
+            }
+            
+            .info-card,
+            .benefit-item {
+                border: 2px solid #fff;
+                background: rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        /* Dark mode support adicional */
+        @media (prefers-color-scheme: dark) {
+            /* Mantener el fondo amarillo incluso en dark mode */
+            .cta-section {
+                background: linear-gradient(135deg, #FFD700, #FFED4E) !important;
+                color: #1a1a1a !important;
+                box-shadow: 0 0 50px rgba(255, 215, 0, 0.4);
+            }
+            
+            .cta-section h2,
+            .cta-section h2 .text {
+                color: #1a1a1a !important;
+                -webkit-text-fill-color: #1a1a1a !important;
+            }
+            
+            .presenter-info {
+                background: rgba(26, 26, 26, 0.1) !important;
+            }
+            
+            .presenter-info h3,
+            .presenter-info p {
+                color: #1a1a1a !important;
+            }
+        }
+
+        /* Animation classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="logo-mushroom">☕</div>
+                <h1>Café Enriquecido con Ganoderma</h1>
+                <p class="subtitle">El primer café saludable del mundo, gracias al hongo de la inmortalidad 🍄</p>
+                <p style="opacity: 0.8; margin-top: 1rem;">
+                    Descubre el secreto asiático de 4,000 años que está revolucionando la salud mundial
+                </p>
+            </div>
+            <div class="scroll-indicator">👇</div>
+        </div>
+    </section>
+
+    <!-- ¿Qué es el Ganoderma? -->
+    <section class="section">
+        <div class="container">
+            <h2><span class="emoji">🤔</span> <span class="text">¿Qué es el Ganoderma?</span></h2>
+            
+            <div class="info-card fade-in">
+                <p><strong>Ganoderma Lucidum</strong>, conocido como <em>"Reishi"</em> o <em>"Hongo de la Inmortalidad"</em>, es un hongo medicinal utilizado durante <strong>más de 4,000 años</strong> en la medicina tradicional asiática.</p>
+                
+                <div style="margin: 1.5rem 0;">
+                    <p>🏺 <strong>Historia:</strong> Reservado para emperadores chinos</p>
+                    <p>👑 <strong>Apodo:</strong> "El Rey de las Hierbas"</p>
+                    <p>🔬 <strong>Ciencia:</strong> Estudiado por universidades mundiales</p>
+                </div>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-box slide-in-left">
+                    <span class="stat-number">200+</span>
+                    <span class="stat-label">Nutrientes naturales</span>
+                </div>
+                <div class="stat-box slide-in-right">
+                    <span class="stat-number">150+</span>
+                    <span class="stat-label">Antioxidantes poderosos</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beneficios para la Salud -->
+    <section class="section">
+        <div class="container">
+            <h2><span class="emoji">💪</span> <span class="text">Beneficios Científicamente Comprobados</span></h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <span class="benefit-icon">🛡️</span>
+                    <strong>Sistema Inmunológico</strong><br>
+                    <small>Fortalece las defensas naturales del cuerpo</small>
+                </div>
+                
+                <div class="benefit-item">
+                    <span class="benefit-icon">❤️</span>
+                    <strong>Salud Cardiovascular</strong><br>
+                    <small>Protege el corazón y mejora la circulación</small>
+                </div>
+                
+                <div class="benefit-item">
+                    <span class="benefit-icon">🧼</span>
+                    <strong>Desintoxicación</strong><br>
+                    <small>Limpia el hígado y elimina toxinas</small>
+                </div>
+                
+                <div class="benefit-item">
+                    <span class="benefit-icon">⚡</span>
+                    <strong>Energía y Vitalidad</strong><br>
+                    <small>Combate el cansancio y aumenta la energía</small>
+                </div>
+                
+                <div class="benefit-item">
+                    <span class="benefit-icon">🧠</span>
+                    <strong>Función Cerebral</strong><br>
+                    <small>Mejora la concentración y reduce el estrés</small>
+                </div>
+                
+                <div class="benefit-item">
+                    <span class="benefit-icon">🌱</span>
+                    <strong>Antienvejecimiento</strong><br>
+                    <small>Neutraliza radicales libres y rejuvenece</small>
+                </div>
+                
+                <div class="benefit-item">
+                    <span class="benefit-icon">🔬</span>
+                    <strong>Propiedades Anticancerígenas</strong><br>
+                    <small>Estudios muestran efectos antitumorales</small>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                🔬 <strong>Respaldo Científico:</strong> Más de 1,000 estudios científicos publicados avalan los beneficios del Ganoderma Lucidum
+            </div>
+        </div>
+    </section>
+
+    <!-- Productos Gano Excel -->
+    <section class="section">
+        <div class="container">
+            <h2><span class="emoji">☕</span> <span class="text">Productos con Ganoderma</span></h2>
+            
+            <div class="info-card">
+                <p><strong>¿Por qué tomar café normal cuando puedes tomar café que te sana?</strong></p>
+                <p style="margin-top: 1rem; opacity: 0.9;">
+                    Gano Excel incorpora el Ganoderma Lucidum en productos que consumes diariamente
+                </p>
+            </div>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <img src="https://i.ibb.co/LzNbZ6PV/1-3en1.png" 
+                         alt="GanoCafé 3 en 1" 
+                         class="product-image">
+                    <div class="product-name">GanoCafé 3 en 1</div>
+                    <small>Café + Ganoderma + Cremosidad</small>
+                </div>
+                
+                <div class="product-card">
+                    <img src="https://i.ibb.co/RT2k65Vk/2-clasico.png" 
+                         alt="GanoCafé Clásico" 
+                         class="product-image">
+                    <div class="product-name">GanoCafé Clásico</div>
+                    <small>Café negro puro con Ganoderma</small>
+                </div>
+                
+                <div class="product-card">
+                    <img src="https://i.ibb.co/nJ2NB0D/3-chocolate.png" 
+                         alt="Gano Chocolate" 
+                         class="product-image">
+                    <div class="product-name">Gano Chocolate</div>
+                    <small>Chocolate premium + medicina</small>
+                </div>
+                
+                <div class="product-card">
+                    <img src="https://i.ibb.co/VWG4zsL0/4-latte.png" 
+                         alt="Latte Rico" 
+                         class="product-image">
+                    <div class="product-name">Latte Rico</div>
+                    <small>Cremosidad saludable</small>
+                </div>
+                
+                <div class="product-card">
+                    <img src="https://i.ibb.co/BKYqXZ2J/5-mocha.png" 
+                         alt="Mocha Rico" 
+                         class="product-image">
+                    <div class="product-name">Mocha Rico</div>
+                    <small>El lujo de cuidarte</small>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                ✨ <strong>Ventaja Única:</strong> Cambias tu marca habitual por una que te cuida. Mismo placer, mejores beneficios.
+            </div>
+        </div>
+    </section>
+
+    <!-- ¿Cómo Funciona? -->
+    <section class="section">
+        <div class="container">
+            <h2><span class="emoji">🔬</span> <span class="text">¿Cómo Funciona en tu Cuerpo?</span></h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <span class="benefit-icon">🧬</span>
+                    <strong>1. Limpia</strong><br>
+                    <small>Elimina toxinas acumuladas en células</small>
+                </div>
+                
+                <div class="benefit-item">
+                    <span class="benefit-icon">🍎</span>
+                    <strong>2. Nutre</strong><br>
+                    <small>Aporta más de 200 nutrientes esenciales</small>
+                </div>
+                
+                <div class="benefit-item">
+                    <span class="benefit-icon">🔋</span>
+                    <strong>3. Equilibra</strong><br>
+                    <small>Regula sistemas del cuerpo naturalmente</small>
+                </div>
+                
+                <div class="benefit-item">
+                    <span class="benefit-icon">💪</span>
+                    <strong>4. Fortalece</strong><br>
+                    <small>Mejora la respuesta inmunológica</small>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3 style="color: #FFD700; margin-bottom: 1rem;">🌟 ¿Qué lo hace único?</h3>
+                <p>• <strong>Sin efectos secundarios</strong> conocidos</p>
+                <p>• <strong>Adaptógeno natural</strong> - se adapta a las necesidades de tu cuerpo</p>
+                <p>• <strong>Complementa</strong> cualquier tratamiento médico</p>
+                <p>• <strong>Apto para toda la familia</strong> - desde niños hasta adultos mayores</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <h2><span class="emoji">🌟</span> <span class="text">¿Te Interesa Conocer Más?</span></h2>
+            
+            <div class="presenter-info">
+                <img src="https://i.ibb.co/YTFq6QgF/Foto-profesional.png" 
+                     alt="Master Daniel Portillo" 
+                     class="presenter-photo">
+                <h3 style="color: #1a1a1a; margin-bottom: 0.5rem;">Master Daniel Portillo</h3>
+                <p style="color: #1a1a1a; opacity: 0.8; margin-bottom: 1rem;">
+                    Consultor Autorizado Gano Excel El Salvador
+                </p>
+                <p style="color: #1a1a1a; font-size: 0.9rem; opacity: 0.7;">
+                    +7 años compartiendo los beneficios del Ganoderma<br>
+                    Cientos de personas transformadas
+                </p>
+            </div>
+
+            <p style="font-size: 1.2rem; margin-bottom: 2rem; color: #1a1a1a; font-weight: 600;">
+                <strong>¿Quieres probar los productos y experimentar los beneficios?</strong>
+            </p>
+            
+            <a href="https://wa.me/50378504789?text=Hola%20Master%20Daniel%2C%20vi%20la%20presentación%20del%20Ganoderma%20y%20me%20interesa%20conocer%20más%20sobre%20los%20productos%20y%20sus%20beneficios%20para%20la%20salud.%20¿Podemos%20hablar%3F" 
+               class="whatsapp-btn" 
+               target="_blank">
+                📱 Contactar por WhatsApp
+            </a>
+            
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: #1a1a1a; opacity: 0.8; font-weight: 500;">
+                Respuesta rápida y asesoría personalizada
+            </p>
+        </div>
+    </section>
+
+    <!-- WhatsApp flotante -->
+    <a href="https://wa.me/50378504789?text=Hola%20Master%20Daniel%2C%20vi%20la%20presentación%20del%20Ganoderma%20y%20me%20interesa%20conocer%20más%20sobre%20los%20productos%20y%20sus%20beneficios%20para%20la%20salud.%20¿Podemos%20hablar%3F" 
+       class="whatsapp-fixed" 
+       target="_blank">
+        📱
+    </a>
+
+    <script>
+        // CONFIGURACIÓN DE ANALYTICS PARA VERCEL
+        // 1. En Vercel Dashboard > Project Settings > Environment Variables:
+        //    NEXT_PUBLIC_GA_ID = tu_google_analytics_id (ej: G-XXXXXXXXXX)
+        // 2. Vercel Analytics se activa automáticamente en producción
+        
+        // Variables globales para tracking
+        let sessionStartTime = Date.now();
+        let maxScrollReached = 0;
+        let sectionsViewed = new Set();
+        let orientationChanges = 0;
+        
+        // DETECCIÓN AUTOMÁTICA DE ORIENTACIÓN Y VIEWPORT
+        function handleViewportAndOrientation() {
+            // Actualizar viewport height real (fix para móviles)
+            let vh = window.innerHeight * 0.01;
+            let vw = window.innerWidth * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            document.documentElement.style.setProperty('--vw', `${vw}px`);
+            
+            // Detectar orientación
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const isPortrait = window.innerHeight > window.innerWidth;
+            
+            // Aplicar clases de orientación
+            document.body.classList.toggle('landscape-mode', isLandscape);
+            document.body.classList.toggle('portrait-mode', isPortrait);
+            
+            // Analytics: track orientation change
+            if (orientationChanges > 0) { // No contar la carga inicial
+                if (typeof gtag === 'function') {
+                    gtag('event', 'orientation_change', {
+                        event_category: 'user_interaction',
+                        orientation: isLandscape ? 'landscape' : 'portrait',
+                        viewport_width: window.innerWidth,
+                        viewport_height: window.innerHeight
+                    });
+                }
+                
+                if (window.va) {
+                    window.va('track', 'orientation_change', {
+                        orientation: isLandscape ? 'landscape' : 'portrait',
+                        device_width: window.innerWidth,
+                        device_height: window.innerHeight
+                    });
+                }
+            }
+            orientationChanges++;
+        }
+
+        // INTERSECTION OBSERVER PARA ANIMACIONES Y ANALYTICS
+        const observerOptions = {
+            threshold: [0.1, 0.5, 0.9],
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const sectionName = entry.target.dataset.section || 'unknown';
+                
+                if (entry.isIntersecting) {
+                    // Activar animaciones
+                    entry.target.style.animationPlayState = 'running';
+                    
+                    // Track section views
+                    if (entry.intersectionRatio > 0.5 && !sectionsViewed.has(sectionName)) {
+                        sectionsViewed.add(sectionName);
+                        
+                        // Analytics: section viewed
+                        if (typeof gtag === 'function') {
+                            gtag('event', 'section_view', {
+                                event_category: 'engagement',
+                                section_name: sectionName,
+                                time_on_page: Date.now() - sessionStartTime
+                            });
+                        }
+                        
+                        if (window.va) {
+                            window.va('track', 'section_view', {
+                                section: sectionName,
+                                timestamp: new Date().toISOString()
+                            });
+                        }
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // SCROLL TRACKING AVANZADO
+        let scrollTimeout;
+        function handleScroll() {
+            const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+            
+            if (scrollPercent > maxScrollReached) {
+                maxScrollReached = scrollPercent;
+                
+                // Track scroll milestones
+                if (scrollPercent % 25 === 0 && scrollPercent > 0) {
+                    if (typeof gtag === 'function') {
+                        gtag('event', 'scroll_depth', {
+                            event_category: 'engagement',
+                            value: scrollPercent,
+                            event_label: `${scrollPercent}%_scrolled`
+                        });
+                    }
+                    
+                    if (window.va) {
+                        window.va('track', 'scroll_milestone', {
+                            percentage: scrollPercent,
+                            max_scroll: maxScrollReached
+                        });
+                    }
+                }
+            }
+            
+            // Debounce scroll end detection
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                // Analytics: scroll session end
+                if (window.va) {
+                    window.va('track', 'scroll_session', {
+                        max_scroll_reached: maxScrollReached,
+                        final_position: scrollPercent
+                    });
+                }
+            }, 500);
+        }
+
+        // TOUCH GESTURE DETECTION
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+
+        function handleTouchStart(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+        }
+
+        function handleTouchEnd(e) {
+            if (!touchStartX || !touchStartY) return;
+            
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const touchDuration = Date.now() - touchStartTime;
+            
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            
+            // Detect swipe gestures
+            if (Math.abs(deltaX) > 50 || Math.abs(deltaY) > 50) {
+                let swipeDirection = '';
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    swipeDirection = deltaX > 0 ? 'right' : 'left';
+                } else {
+                    swipeDirection = deltaY > 0 ? 'down' : 'up';
+                }
+                
+                // Analytics: swipe gesture
+                if (typeof gtag === 'function') {
+                    gtag('event', 'swipe_gesture', {
+                        event_category: 'touch_interaction',
+                        swipe_direction: swipeDirection,
+                        swipe_distance: Math.sqrt(deltaX*deltaX + deltaY*deltaY),
+                        swipe_duration: touchDuration
+                    });
+                }
+            }
+            
+            // Reset touch tracking
+            touchStartX = 0;
+            touchStartY = 0;
+            touchStartTime = 0;
+        }
+
+        // WHATSAPP CLICK TRACKING AVANZADO
+        function trackWhatsAppClick(source) {
+            const timeOnPage = Date.now() - sessionStartTime;
+            const scrolledPercentage = maxScrollReached;
+            
+            // Google Analytics
+            if (typeof gtag === 'function') {
+                gtag('event', 'whatsapp_click', {
+                    event_category: 'conversion',
+                    event_label: source,
+                    value: 1,
+                    custom_parameter_1: 'ganoderma_interest',
+                    time_on_page: timeOnPage,
+                    scroll_depth: scrolledPercentage,
+                    sections_viewed: sectionsViewed.size
+                });
+                
+                // Conversion tracking
+                gtag('event', 'conversion', {
+                    send_to: 'AW-CONVERSION_ID/CONVERSION_LABEL', // Reemplazar con tu ID real
+                    value: 1.0,
+                    currency: 'USD'
+                });
+            }
+            
+            // Vercel Analytics
+            if (window.va) {
+                window.va('track', 'whatsapp_contact', {
+                    source: source,
+                    engagement_level: scrolledPercentage > 75 ? 'high' : scrolledPercentage > 50 ? 'medium' : 'low',
+                    time_spent: timeOnPage,
+                    sections_completed: sectionsViewed.size,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            
+            // Custom event para tracking detallado
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'ganoderma_lead',
+                contact_method: 'whatsapp',
+                product_interest: 'ganoderma_coffee',
+                engagement_score: Math.min(100, (scrolledPercentage + sectionsViewed.size * 10)),
+                session_duration: timeOnPage
+            });
+        }
+
+        // PERFORMANCE MONITORING
+        function trackPerformance() {
+            // Navigation timing
+            if ('performance' in window && 'timing' in performance) {
+                const timing = performance.timing;
+                const loadTime = timing.loadEventEnd - timing.navigationStart;
+                const domReady = timing.domContentLoadedEventEnd - timing.navigationStart;
+                
+                if (typeof gtag === 'function') {
+                    gtag('event', 'timing_complete', {
+                        event_category: 'performance',
+                        name: 'load_time',
+                        value: loadTime
+                    });
+                    
+                    gtag('event', 'timing_complete', {
+                        event_category: 'performance',
+                        name: 'dom_ready',
+                        value: domReady
+                    });
+                }
+            }
+            
+            // Connection info
+            if ('connection' in navigator) {
+                const connection = navigator.connection;
+                if (window.va) {
+                    window.va('track', 'connection_info', {
+                        effective_type: connection.effectiveType,
+                        downlink: connection.downlink,
+                        rtt: connection.rtt
+                    });
+                }
+            }
+        }
+
+        // DEVICE DETECTION
+        function detectDevice() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isTablet = /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(navigator.userAgent);
+            const isDesktop = !isMobile && !isTablet;
+            
+            // Track device type
+            if (window.va) {
+                window.va('track', 'device_info', {
+                    device_type: isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop',
+                    user_agent: navigator.userAgent,
+                    screen_width: screen.width,
+                    screen_height: screen.height,
+                    pixel_ratio: window.devicePixelRatio || 1
+                });
+            }
+            
+            return { isMobile, isTablet, isDesktop };
+        }
+
+        // INICIALIZACIÓN DE LA APLICACIÓN
+        document.addEventListener('DOMContentLoaded', function() {
+            // Detectar dispositivo
+            const deviceInfo = detectDevice();
+            
+            // Configurar viewport y orientación
+            handleViewportAndOrientation();
+            
+            // Configurar observers para animaciones y analytics
+            document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+                el.style.animationPlayState = 'paused';
+                sectionObserver.observe(el);
+            });
+            
+            // Agregar data-section a las secciones para tracking
+            document.querySelectorAll('.section').forEach((section, index) => {
+                const sectionNames = ['hero', 'what_is', 'benefits', 'products', 'how_works', 'cta'];
+                section.dataset.section = sectionNames[index] || `section_${index}`;
+                sectionObserver.observe(section);
+            });
+            
+            // Configurar event listeners
+            window.addEventListener('orientationchange', () => {
+                setTimeout(handleViewportAndOrientation, 100);
+            });
+            
+            window.addEventListener('resize', handleViewportAndOrientation);
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            
+            // Touch events
+            document.addEventListener('touchstart', handleTouchStart, { passive: true });
+            document.addEventListener('touchend', handleTouchEnd, { passive: true });
+            
+            // Click tracking para WhatsApp
+            document.querySelectorAll('.whatsapp-btn').forEach(btn => {
+                btn.addEventListener('click', () => trackWhatsAppClick('main_button'));
+            });
+            
+            document.querySelectorAll('.whatsapp-fixed').forEach(btn => {
+                btn.addEventListener('click', () => trackWhatsAppClick('floating_button'));
+            });
+            
+            // Track all clicks for heatmap analysis
+            document.addEventListener('click', function(e) {
+                if (window.va) {
+                    window.va('track', 'element_click', {
+                        element_type: e.target.tagName.toLowerCase(),
+                        element_class: e.target.className,
+                        element_id: e.target.id,
+                        x_position: e.clientX,
+                        y_position: e.clientY
+                    });
+                }
+            });
+            
+            // Visibility change tracking
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    // Page hidden - track session data
+                    if (window.va) {
+                        window.va('track', 'session_pause', {
+                            time_visible: Date.now() - sessionStartTime,
+                            max_scroll_reached: maxScrollReached,
+                            sections_viewed: sectionsViewed.size
+                        });
+                    }
+                } else {
+                    // Page visible again
+                    sessionStartTime = Date.now();
+                }
+            });
+            
+            // Smooth scroll optimizado
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        const targetPosition = target.offsetTop - 20;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Track performance metrics después de la carga
+            window.addEventListener('load', trackPerformance);
+        });
+
+        // UNLOAD TRACKING
+        window.addEventListener('beforeunload', function() {
+            const sessionDuration = Date.now() - sessionStartTime;
+            
+            // Send beacon para datos críticos
+            if ('sendBeacon' in navigator && window.va) {
+                const data = JSON.stringify({
+                    event: 'session_end',
+                    duration: sessionDuration,
+                    max_scroll: maxScrollReached,
+                    sections_viewed: sectionsViewed.size,
+                    orientation_changes: orientationChanges
+                });
+                
+                navigator.sendBeacon('/api/analytics', data);
+            }
+        });
+
+        // ERROR TRACKING
+        window.addEventListener('error', function(e) {
+            if (typeof gtag === 'function') {
+                gtag('event', 'exception', {
+                    description: `${e.message} - ${e.filename}:${e.lineno}`,
+                    fatal: false,
+                    page_title: 'Ganoderma Presentation'
+                });
+            }
+        });
+
+        // PRELOAD OPTIMIZATION
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => {
+                // Precargar WhatsApp link
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = 'https://wa.me/50378504789';
+                document.head.appendChild(link);
+                
+                // Precargar imágenes críticas
+                const criticalImages = [
+                    'https://i.ibb.co/YTFq6QgF/Foto-profesional.png'
+                ];
+                
+                criticalImages.forEach(src => {
+                    const img = new Image();
+                    img.src = src;
+                });
+            });
+        }
+    </script>
+</body>
+</html>
